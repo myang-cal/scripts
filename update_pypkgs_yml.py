@@ -5,12 +5,10 @@ def get_package_names(requirements_file):
     package_names = []
     with open(requirements_file, "r") as file:
         for line in file:
-            # Ignore comments and empty lines
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
 
-            # Extract the package name from the line
             package_name = line.split("==")[0]
             package_names.append(package_name)
 
@@ -29,7 +27,6 @@ def update_yaml_file(yaml_file, allowed_packages_list, disallowed_packages):
     with open(yaml_file, "r") as file:
         yaml_data = yaml.safe_load(file)
 
-    # Update the allowedPythonPackages section with disallowed_packages
     yaml_data["allowedPythonPackages"] = allowed_packages_list + disallowed_packages
 
     with open(yaml_file, "w") as file:
