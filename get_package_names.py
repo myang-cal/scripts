@@ -25,6 +25,17 @@ def get_allowed_packages(yaml_file):
     return allowed_packages
 
 
+def update_yaml_file(yaml_file, allowed_packages_list, disallowed_packages):
+    with open(yaml_file, "r") as file:
+        yaml_data = yaml.safe_load(file)
+
+    # Update the allowedPythonPackages section with disallowed_packages
+    yaml_data["allowedPythonPackages"] = allowed_packages_list + disallowed_packages
+
+    with open(yaml_file, "w") as file:
+        yaml.dump(yaml_data, file, default_flow_style=False)
+
+
 requirements_file = "./requirements.txt"
 package_list = get_package_names(requirements_file)
 yaml_file = "./appian-proxy-config-internal.yml"
@@ -32,3 +43,5 @@ allowed_packages_list = get_allowed_packages(yaml_file)
 
 disallowed_packages = [pkg for pkg in package_list if pkg not in allowed_packages_list]
 print(disallowed_packages)
+
+update_yaml_file(yaml_file, allowed_packages_list, disallowed_packages)
